@@ -1,21 +1,22 @@
 import { initializeApp } from "firebase/app";
 
-export default function initializeFire() {
+export function initializeFire() {
   const firebaseConfig = {
-    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
-    authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
-    projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
-    storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
-    messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
-    appId: process.env.REACT_APP_FIREBASE_APP_ID,
-    measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
+    apiKey: "AIzaSyDUL4AJNEmD3wCo1dfxJXxpV_aVomUyfI8",
+    authDomain: "reference-material-1b31c.firebaseapp.com",
+    projectId: "reference-material-1b31c",
+    storageBucket: "reference-material-1b31c.appspot.com",
+    messagingSenderId: "379322752873",
+    appId: "1:379322752873:web:dbcc2d7e1c52f34ddb67f8",
+    measurementId: "G-406G8RFC9D",
   };
-
-    // Initialize Firebase
-    console.log("firebaseConfig");
-  console.log(firebaseConfig);
 
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   return app;
+}
+
+export default function initialize(req, res) {
+    let app = initializeFire();
+    res.status(200).json({app});
 }

@@ -5,12 +5,12 @@ import logo from "../../images/logo.svg";
 import style from "./dashboard.module.css";
 import arrowIcon from "../../images/drop.svg";
 import filterIcon from "../../images/filter.svg";
-import DownloadIcon from "../../images/downloadIcon.js";
 import closeIcon from "../../images/close.svg";
 
 // storage reference
-import { getStorage ,ref , uploadBytes , getDownloadURL  } from "firebase/storage";
-import { initializeApp } from "firebase/app";
+import { getStorage ,ref , uploadBytes  } from "firebase/storage";
+import { initialize_fire } from "../_initialize_fire.js";
+import Posts from "./Posts";
 
 let sem = ["1st Semester", "2nd Semester",
 "3rd Semester", "4th Semester","5th Semester","6th Semester",
@@ -53,17 +53,18 @@ let postData = {
   1: {
     title: "Pls Select Branch And Subjects to get started",
     description:
-      "Default Description",
+    "Default Description",
     author: "Welcome",
     author_email: "We are pleased to see you here",
     file_urls:{}
   },
-
+  
 };
 
 let institute;
 let author ;
 let author_email;
+let app;
 
 export default function Dashboard() {
   const [activetab, setActiveTab] = useState(0);
@@ -72,23 +73,28 @@ export default function Dashboard() {
   const [description, setDescription] = useState(" ");
   const [files , setFiles] = useState([]);
   const [selectedData, setSelectedData] = useState(semData);
-
+  
   const [postState , setPostState] = useState(postData);
-
+  
   useEffect(() => {
     fetchAllData()
     fetchPost(setPostState)
+    app =  initialize_fire();
    } , []
   ) 
 
   return (
+
+    // -----------------dashboard -------------------------
     <div className={style.dashboardPage}>
+
+      {/* ----------------------------- Logo And Navbar ------------------- */}
       <Image src={logo} alt="logo" className={style.logo} />
       <div className={style.navbar}>
         <span
           className={activetab == 0 ? style.selectedTab : ""}
           onClick={() => setActiveTab(0)}
-        >
+          >
           Explore
         </span>
         <span
@@ -105,6 +111,7 @@ export default function Dashboard() {
         </span>
       </div>
 
+      {/* ----------------------------- Filter Bar ------------------- */}
       <div
         className={style.filterBar}
         style={
@@ -159,15 +166,17 @@ export default function Dashboard() {
         </div>
       </div>
 
+      {/* ----------------------------- Posts ------------------- */}
       <div
         className={style.contentGrid}
         style={activetab == 0 ? { display: "flex" } : { display: "none" }}
       >
         {Object.keys(postState).map((key) => {
-          return <Posts key={key} data={postState[key]} />;
+          return <Posts key={key} data={postState[key]} app={app} />;
         })}
       </div>
 
+      {/* ----------------------------- Upload ------------------- */}
       <div
         className={style.uploadSection}
         style={activetab == 1 ? { display: "flex" } : { display: "none" }}
@@ -200,8 +209,8 @@ export default function Dashboard() {
 
         <div className={style.inputContainer}>
           {/* <label>Files</label> */}
-          {/* pdf and image input */}
-          <input name="file_" id="form_upload" type="file" accept="image/*, application/pdf"
+          {/* pdf .txt and image input */}
+          <input name="file_" id="form_upload" type="file" accept="image/*, application/pdf , text/plain"
            multiple  onChange={
             (e) => {
               // get length of files
@@ -221,7 +230,6 @@ export default function Dashboard() {
           }/>
         </div>
       </div>
-
       <div
         className={style.btn_container}
         style={activetab == 1 ? { display: "flex" } : { display: "none" }}
@@ -236,6 +244,7 @@ export default function Dashboard() {
         </div>
       </div>
 
+      {/* ----------------------------- Community ------------------- */}
       <div
         className={style.community}
         style={activetab == 2 ? { display: "flex" } : { display: "none" }}
@@ -243,63 +252,15 @@ export default function Dashboard() {
         This feature is under build ...
       </div>
 
-      {/* ................................ selection box ....................................... */}
+
+      {/* ................................ selection modal box ....................................... */}
       {modalOpen && <ModalBox data={selectedData} closeModal={setModalOpen} setPostState={setPostState}/>}
+
     </div>
+  
   );
 }
 
-function Posts(props) {
-  return (
-    <div className={style.dynamicPost}>
-      <div className={style.postHeader}>{props.data.title}</div>
-
-      <div className={style.postDesc}>{props.data.content}</div>
-      <div className={style.postAuthor}>
-        <span>Contributor : </span> {props.data.author}(
-        {props.data.author_email})
-      </div>
-
-      <div className={style.downloadContainer}>
-        {
-        props.data.file_urls &&
-        Object.keys(props.data.file_urls).map((key) => {
-          return (
-            <div className={style.downloadChip} key={key} onClick={
-              () => {
-
-                const firebaseConfig = {
-                  apiKey: "AIzaSyDUL4AJNEmD3wCo1dfxJXxpV_aVomUyfI8",
-                  authDomain: "reference-material-1b31c.firebaseapp.com",
-                  projectId: "reference-material-1b31c",
-                  storageBucket: "reference-material-1b31c.appspot.com",
-                  messagingSenderId: "379322752873",
-                  appId: "1:379322752873:web:dbcc2d7e1c52f34ddb67f8",
-                  measurementId: "G-406G8RFC9D"
-                };
-              
-                const app = initializeApp(firebaseConfig);
-              
-                const storage = getStorage(app);
-                getDownloadURL(ref(storage , props.data.file_urls[key])).then(url => {
-                  window.open(url);
-                }).catch(error => {
-                  console.log(error);
-                })
-
-              }
-            }>
-              <span>{props.data.file_urls[key].slice(-1,-10)}</span>
-              <DownloadIcon color="#a8a8a8" width="24" marginLeft="5px" />
-            </div>
-          );
-        })
-        
-        }
-      </div>
-    </div>
-  );
-}
 
 function ModalBox(props) {
   return (
@@ -351,19 +312,7 @@ function uploadData(title , description , files , author , programme , semester 
   author = localStorage.getItem("OR_name");
   author_email = localStorage.getItem("OR_email");
 
-
-  // initialize app 
-  const firebaseConfig = {
-    apiKey: "AIzaSyDUL4AJNEmD3wCo1dfxJXxpV_aVomUyfI8",
-    authDomain: "reference-material-1b31c.firebaseapp.com",
-    projectId: "reference-material-1b31c",
-    storageBucket: "reference-material-1b31c.appspot.com",
-    messagingSenderId: "379322752873",
-    appId: "1:379322752873:web:dbcc2d7e1c52f34ddb67f8",
-    measurementId: "G-406G8RFC9D"
-  };
-
-  const app = initializeApp(firebaseConfig);
+       let app = initialize_fire();
 
       uploadFiles(app,  programme , semester, subject, files).then((url)=>{
       console.log(url);
@@ -419,7 +368,6 @@ async function uploadFiles(app, programme , semester , subject , file) {
    return file_urls;
         
 }
-
 
 function fetchPost(setPostState){
 
