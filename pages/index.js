@@ -49,7 +49,6 @@ function googleAuth(){
   const auth = getAuth();
   signInWithPopup(auth, provider)
   .then((result) => {
-
     const credential = GoogleAuthProvider.credentialFromResult(result);
     const token = credential.accessToken;
     user = result.user;
@@ -65,13 +64,16 @@ function googleAuth(){
     if(user.email.split("@")[1] !== "tezu.ac.in" && user.email){
       window.alert("Please "+ user.displayName + " login with a Tezu email");
     }else{
-      localStorage.setItem("OR_user", JSON.stringify({
-        name: user.displayName,
-        email: user.email,
-        photo: user.photoURL,
-      }));
+      localStorage.setItem("OR_name", user.displayName);
+      localStorage.setItem("OR_email", user.email);
+      localStorage.setItem("OR_photo", user.photoURL);
+      localStorage.setItem("OR_institute", user.email.split("@")[1].replace(/\./g, '_').replace(/\s+/g, '_'));
     }
-  }
+
+    // send to dashboard
+    window.location.href = "/dashboard";
+
+    }
   })
 
 }

@@ -17,26 +17,24 @@ function initializeFire(){
     }
 
 
-export default function sendPost(req, res) {
-  console.log("1");
-  
-  initializeFire();
-  const database = getDatabase();
-  let postData;
+
+let institute_data = {};
+
+export default function send_cat_data(req, res) {
+    initializeFire();
+    let institute = req.body.institute;
+    const database = getDatabase();
+
+    get(ref(database , `/insti_data/${institute}/`)).then((snapshot) => {
+        if(snapshot.val()){
+           
+                    institute_data = snapshot.exportVal();
+                    console.log(institute_data);
+                    res.status(200).json(institute_data);
+        }else{
+            res.status(200).json("no data");
+        }
+    })
 
 
-
-  get(ref(database , `/postData/${req.body.ref}`)).then((snapshot) => {
-      if(snapshot.val()){
-          postData = snapshot.exportVal();
-          console.log(postData);
-          res.status(200).json(postData);
-      }else{
-          res.status(500).json("no data");
-      }
-  }).catch((error) => {
-    console.log(error);
-    res.status(500).json("No data");
-  })
-  return ;
 }
