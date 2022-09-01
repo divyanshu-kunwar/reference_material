@@ -11,6 +11,7 @@ import closeIcon from "../../images/close.svg";
 import { getStorage ,ref , uploadBytes  } from "firebase/storage";
 import { initialize_fire } from "../_initialize_fire.js";
 import Posts from "./Posts";
+import Loader from "./Loader";
 
 let sem = ["1st Semester", "2nd Semester",
 "3rd Semester", "4th Semester","5th Semester","6th Semester",
@@ -73,6 +74,7 @@ export default function Dashboard() {
   const [description, setDescription] = useState(" ");
   const [files , setFiles] = useState([]);
   const [selectedData, setSelectedData] = useState(semData);
+  const [isUploading , setIsUploading] = useState('none');
   
   const [postState , setPostState] = useState(postData);
   
@@ -237,7 +239,7 @@ export default function Dashboard() {
         <div className={style.form_btn}
         onClick={() => {
           uploadData(title , description , files , author , BranchData.options[BranchData.selected] 
-            , semData.options[semData.selected] , subData.options[subData.selected]);
+            , semData.options[semData.selected] , subData.options[subData.selected] , setIsUploading);
         }}
         >
           Submit
@@ -255,6 +257,8 @@ export default function Dashboard() {
 
       {/* ................................ selection modal box ....................................... */}
       {modalOpen && <ModalBox data={selectedData} closeModal={setModalOpen} setPostState={setPostState}/>}
+
+      <Loader display={isUploading} />
 
     </div>
   
@@ -306,7 +310,7 @@ function ModalBox(props) {
   );
 }
 
-function uploadData(title , description , files , author , programme , semester , subject) {
+function uploadData(title , description , files , author , programme , semester , subject , setIsUploading) {
 
   institute = localStorage.getItem("OR_institute");
   author = localStorage.getItem("OR_name");
@@ -314,6 +318,7 @@ function uploadData(title , description , files , author , programme , semester 
 
        let app = initialize_fire();
 
+       setIsUploading("block");
       uploadFiles(app,  programme , semester, subject, files).then((url)=>{
       console.log(url);
 
@@ -337,13 +342,17 @@ function uploadData(title , description , files , author , programme , semester 
           }),
         }).then((res) => {
           console.log(res.json().then((data) => {
+            setIsUploading("none");
             console.log(data);
+            window.alert("Post Uploaded Successfully");
           }
           ));
         }).catch((err) => {
           console.log(err);
+          setIsUploading("none");
         })
       })
+
 
 }
     
