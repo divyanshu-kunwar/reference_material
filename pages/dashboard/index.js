@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import Head from "next/head";
 
 import logo from "../../images/logo.svg";
 import style from "./dashboard.module.css";
@@ -90,6 +91,9 @@ export default function Dashboard() {
 
     // -----------------dashboard -------------------------
     <div className={style.dashboardPage}>
+      <Head>
+        <title>Dashboard - Open Resource Material</title>
+      </Head>
 
       {/* ----------------------------- Logo And Navbar ------------------- */}
       <Image src={logo} alt="logo" className={style.logo} />

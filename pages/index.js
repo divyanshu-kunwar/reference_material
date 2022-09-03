@@ -1,5 +1,7 @@
 import { initialize_fire } from "../Utils/_initialize_fire";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import Head from 'next/head'
+
 
 
 import Image from "next/image";
@@ -12,6 +14,9 @@ export default function Home() {
   {initialize_fire()}
   return (
     <div className={style.loginPage}>
+      <Head>
+        <title>Login - Open Resource Material</title>
+      </Head>
       
       <Image className={style.logo} src={logo} alt="Logo"/>
       <Image className={style.google}  src={googleLogo} alt="Google"
