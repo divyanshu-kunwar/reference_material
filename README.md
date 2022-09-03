@@ -2,8 +2,6 @@
 <img src="https://raw.githubusercontent.com/KUNWAR-DIVYANSHU/reference_material/f979a0622d6fd39a4d4fb350b20fa5528beb3021/images/logo.svg" />
 </p>
 
-## Open Reference Material
-
 Demo at : https://reference-material.vercel.app/
 
 
