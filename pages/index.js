@@ -47,12 +47,19 @@ function googleAuth(){
   .finally(() => {
     if(signedIn){
     if(user.email.split("@")[1] !== "tezu.ac.in" && user.email){
-      window.alert("Please "+ user.displayName + " login with a Tezu email");
+      localStorage.setItem("OR_name", user.displayName);
+      localStorage.setItem("OR_email", user.email);
+      localStorage.setItem("OR_photo", user.photoURL);
+      localStorage.setItem("OR_institute", "tezu_ac_in");
+      localStorage.setItem("OR_guest", "yes");
+      window.location.href = "/dashboard";
+
     }else{
       localStorage.setItem("OR_name", user.displayName);
       localStorage.setItem("OR_email", user.email);
       localStorage.setItem("OR_photo", user.photoURL);
       localStorage.setItem("OR_institute", user.email.split("@")[1].replace(/\./g, '_').replace(/\s+/g, '_'));
+      localStorage.setItem("OR_guest", "no");
     }
 
     // send to dashboard

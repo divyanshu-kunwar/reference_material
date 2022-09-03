@@ -386,3 +386,11 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
+
+  .guestMsg{
+    position: absolute;
+    font-size: small;
+    color: #FF8C8C55;
+    bottom: 5px;
+    z-index: 5;
+  }

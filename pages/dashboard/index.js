@@ -77,9 +77,10 @@ export default function Dashboard() {
   const [isUploading , setIsUploading] = useState('none');
   
   const [postState , setPostState] = useState(postData);
+  const [isNotGuest , setIsNotGuest] = useState(true);
   
   useEffect(() => {
-    fetchAllData()
+    fetchAllData(setIsNotGuest)
     fetchPost(setPostState)
     app =  initialize_fire();
    } , []
@@ -99,18 +100,23 @@ export default function Dashboard() {
           >
           Explore
         </span>
+        {isNotGuest && 
         <span
           className={activetab == 1 ? style.selectedTab : ""}
           onClick={() => setActiveTab(1)}
         >
           Upload
         </span>
+        }
+        {isNotGuest && 
         <span
           className={activetab == 2 ? style.selectedTab : ""}
           onClick={() => setActiveTab(2)}
         >
           Community
         </span>
+        }
+
       </div>
 
       {/* ----------------------------- Filter Bar ------------------- */}
@@ -179,7 +185,8 @@ export default function Dashboard() {
       </div>
 
       {/* ----------------------------- Upload ------------------- */}
-      <div
+      {
+      isNotGuest && <div
         className={style.uploadSection}
         style={activetab == 1 ? { display: "flex" } : { display: "none" }}
       >
@@ -232,6 +239,9 @@ export default function Dashboard() {
           }/>
         </div>
       </div>
+      }
+
+      {isNotGuest &&
       <div
         className={style.btn_container}
         style={activetab == 1 ? { display: "flex" } : { display: "none" }}
@@ -245,20 +255,26 @@ export default function Dashboard() {
           Submit
         </div>
       </div>
+      }
 
       {/* ----------------------------- Community ------------------- */}
+      {
+      isNotGuest &&
       <div
         className={style.community}
         style={activetab == 2 ? { display: "flex" } : { display: "none" }}
       >
         This feature is under build ...
       </div>
-
+  }
+      
 
       {/* ................................ selection modal box ....................................... */}
       {modalOpen && <ModalBox data={selectedData} closeModal={setModalOpen} setPostState={setPostState}/>}
 
       <Loader display={isUploading} />
+
+      {!isNotGuest && <span className={style.guestMsg}>{author} You are logged in as guest</span>}
 
     </div>
   
@@ -417,12 +433,18 @@ function fetchPost(setPostState){
  
 }
 
-function fetchAllData(){
+function fetchAllData(setIsNotGuest){
 
   institute = localStorage.getItem("OR_institute");
   author = localStorage.getItem("OR_name");
   author_email = localStorage.getItem("OR_email");
 
+  if(institute == null || author == null || author_email == null){
+    window.alert("Please login to continue");
+    window.location.href = "/";
+  }else if(localStorage.getItem("OR_guest") == "yes"){
+    setIsNotGuest(false);
+  }
 
   fetch('api/get_catdata' , {
     method: 'POST',
