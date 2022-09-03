@@ -19,8 +19,9 @@ export default function Home() {
       />
 
       <div className={style.bottom_bar}>
-        <span>To see a full list of all the registered institutes listed </span>
-        <span className={style.bottom_link}> click here.</span>
+        {/* <span>To see a full list of all the registered institutes listed </span> */}
+        <span>Site Designed and Developed by Divyanshu Kunwar.<br/>🙏Thanks to contributors.</span>
+        {/* <span className={style.bottom_link}> click here.</span> */}
       </div>
    </div>
   )
