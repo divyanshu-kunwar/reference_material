@@ -43,3 +43,7 @@ export default function Posts(props) {
       </div>
     );
 }
+
+export async function getServerSideProps() {
+  return  props;
+}
