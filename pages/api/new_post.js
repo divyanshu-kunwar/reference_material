@@ -23,8 +23,6 @@ export default function uploadData(req, res) {
 
     let postNo = 0;
 
-    console.log(data);
-
     const database = getDatabase();
 
     get(ref(database , `/postData/${institute}/${programme}/${semester}/${subject}/`)).then((snapshot) => {

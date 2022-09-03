@@ -229,7 +229,6 @@ export default function Dashboard() {
                 filesArr.push(files[i]);
               }
               setFiles(filesArr);
-              console.log(files);
               if(filesArr.length > 2){
                 window.alert("You can upload max 2 files in one post");
                 //clear input
@@ -336,7 +335,6 @@ function uploadData(title , description , files , author , programme , semester 
 
        setIsUploading("block");
       uploadFiles(app,  programme , semester, subject, files).then((url)=>{
-      console.log(url);
 
         fetch("/api/new_post", {
           method: "POST",
@@ -357,12 +355,11 @@ function uploadData(title , description , files , author , programme , semester 
             institute: institute
           }),
         }).then((res) => {
-          console.log(res.json().then((data) => {
+          res.json().then((data) => {
             setIsUploading("none");
-            console.log(data);
             window.alert("Post Uploaded Successfully");
           }
-          ));
+          );
         }).catch((err) => {
           console.log(err);
           setIsUploading("none");
@@ -408,7 +405,6 @@ function fetchPost(setPostState){
   subject_ = subject_.replace(/\s+/g, '_').replace(/\//g, '_').replace(/\./g, '');
   let ref =  `${institute}/${branch_}/${semester_}/${subject_}/`;
 
-  console.log(ref);
 
   fetch("/api/get_post", {
     method: "POST",
@@ -486,6 +482,5 @@ function setSubData(){
   Object.keys(institute_data[BranchData.options[BranchData.selected]][semData.selected+1]).forEach((key) => {
     subData.options.push(institute_data[BranchData.options[BranchData.selected]][semData.selected+1][key]);
   })
-  console.log(subData.options);
   subData.selected = 0;
 }

@@ -37,7 +37,6 @@ function googleAuth(){
     const credential = GoogleAuthProvider.credentialFromResult(result);
     const token = credential.accessToken;
     user = result.user;
-    console.log("user name" , user.displayName , " user email " , user.email , " user photo " , user.photoURL);
     signedIn = true;
 
   }).catch((error) => {

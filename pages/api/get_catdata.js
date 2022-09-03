@@ -14,7 +14,6 @@ export default function send_cat_data(req, res) {
         if(snapshot.val()){
            
                     institute_data = snapshot.exportVal();
-                    console.log(institute_data);
                     res.status(200).json(institute_data);
         }else{
             res.status(200).json("no data");

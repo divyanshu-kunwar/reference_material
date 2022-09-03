@@ -15,7 +15,6 @@ export default function sendPost(req, res) {
   get(ref(database , `/postData/${req.body.ref}`)).then((snapshot) => {
       if(snapshot.val()){
           postData = snapshot.exportVal();
-          console.log(postData);
           res.status(200).json(postData);
       }else{
           res.status(500).json("no data");
