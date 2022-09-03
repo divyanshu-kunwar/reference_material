@@ -9,7 +9,7 @@ import closeIcon from "../../images/close.svg";
 
 // storage reference
 import { getStorage ,ref , uploadBytes  } from "firebase/storage";
-import { initialize_fire } from "../_initialize_fire.js";
+import { initialize_fire } from "../../Utils/_initialize_fire.js";
 import Posts from "./Posts";
 import Loader from "./Loader";
 

@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 
-export function initialize_fire(){
+function initialize_fire(){
     // initialize app 
     const firebaseConfig = {
       apiKey: "AIzaSyDUL4AJNEmD3wCo1dfxJXxpV_aVomUyfI8",
@@ -15,3 +15,5 @@ export function initialize_fire(){
     const app = initializeApp(firebaseConfig);
     return app;
 }
+
+export { initialize_fire };

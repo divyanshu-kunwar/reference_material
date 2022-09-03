@@ -1,4 +1,4 @@
-import { initialize_fire } from "./_initialize_fire";
+import { initialize_fire } from "../Utils/_initialize_fire";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
 
